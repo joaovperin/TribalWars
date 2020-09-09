@@ -1,21 +1,140 @@
 // ==UserScript==
-// @name Incoming Troops
-// @description Shows the total incoming troops (support and attack) in the village info screen
-// @author joaovperin
-// @version 0.4.3
-// @date 2019-07-02
-// @namespace joaovperin
-// @include      https://**.tribalwars.com.*/game.php?**&screen=info_village*
+// @name                Incoming Troops
+// @version     	    1.0.0
+// @description         Shows the total incoming troops (support and attack) in the village info screen
+// @author              joaovperin
+// @icon                https://i.imgur.com/7WgHTT8.gif
+// @include             https://**.tribalwars.com.*/game.php?**&screen=info_village*
+// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/IncomingTroops.user.js
+// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/IncomingTroops.user.js
 // ==/UserScript==
 
 /**
  * THIS SCRIPT WAS FORKED FROM FunnyPocketBook. All credits to him!
+ *
+ * @param {String} unitConfig Units configuration
  */
-(() => {
+((unitConfig) => {
+    'use strict';
 
-    let titleParent = $("#content_value > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2)");
-    let unitConfig =
-        `<h4>Incoming support</h4><span id="supportText"></span>
+    const titleParent = $("#content_value > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2)");
+    titleParent.append($(unitConfig));
+
+    /**
+     * Represents the units in a command
+     */
+    class Units {
+        constructor(spear, sword, axe, archer, spy, light, marcher, heavy, ram, catapult, knight, snob) {
+            this.spear = spear;
+            this.sword = sword;
+            this.axe = axe;
+            this.archer = archer;
+            this.spy = spy;
+            this.light = light;
+            this.marcher = marcher;
+            this.heavy = heavy;
+            this.ram = ram;
+            this.catapult = catapult;
+            this.knight = knight;
+            this.snob = snob;
+        }
+    }
+
+
+    let attackIncs = []; // Store shared incoming attacks
+    let supportIncs = []; // Store shared incoming supports
+    let sharedSupport = false; // true if one incoming support is shared
+    let sharedAttack = false; // true if one incoming attack is shared
+
+    let table = document.querySelector(".commands-container table:nth-child(1)"); // Incoming commands table
+    // Evaluate every incoming command
+    for (let i = 2; i <= table.rows.length; i++) {
+        let inc = table.querySelector("tr.command-row:nth-child(" + i + ") > td:nth-child(1) > span:nth-child(1) > span:nth-child(1) > a:nth-child(1) > span:nth-child(1) > span:nth-child(1)");
+        if (inc.attributes["data-command-type"] == undefined) { // Don't store incoming command if not shared
+            continue;
+        } else if (inc.attributes["data-command-type"].value === "support") {
+            supportIncs.push(inc);
+            sharedSupport = true;
+        } else if (inc.attributes["data-command-type"].value === "attack") {
+            attackIncs.push(inc);
+            sharedAttack = true;
+        }
+    }
+
+    if (sharedAttack) {
+        getUnits(attackIncs);
+    }
+    if (sharedSupport) {
+        getUnits(supportIncs);
+    }
+
+    /**
+     * Calculates total amount of incoming troops
+     *
+     * @param {String[]} incomings Array of incoming commands
+     */
+    function getUnits(incomings) {
+        let type;
+        if (incomings[0].attributes["data-command-type"].value == "support") {
+            type = "support";
+        } else {
+            type = "attack";
+        }
+        let counterGetAmnt = 0; // Counts amount of processed commands
+        let incUnits = new Units(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        let timeout = 0;
+        if (incomings.length === 0) {
+            return;
+        }
+        // Get units of each incoming command
+        incomings.forEach(function (ele) {
+            let id = ele.getAttribute("data-command-id"); // Get command ID
+            timeout += Math.random() * 70 + 40;
+            // Get request for command details and extract amount of troops
+            setTimeout(function () {
+                $.get(window.location.origin + "/game.php?village=" + game_data.village.id + "&screen=info_command&ajax=details&id=" + id, function (response) {
+                    let responseUnits = response.units;
+                    counterGetAmnt++;
+                    if (type === "attack") {
+                        document.getElementById("attackText").innerText = "Processing " + counterGetAmnt + "/" + incomings.length + " commands";
+                    } else {
+                        document.getElementById("supportText").innerText = "Processing " + counterGetAmnt + "/" + incomings.length + " commands";
+                    }
+                    // Add the units from the response together
+                    Object.keys(responseUnits).forEach((key) => {
+                        incUnits[key] += parseInt(responseUnits[key].count);
+                    });
+                    // If all incoming commands have been processed, write the total number of troops into the table
+                    if (counterGetAmnt == incomings.length) {
+                        writeUnits(incomings, incUnits);
+                    }
+                });
+            }, timeout)
+        });
+    }
+
+    /**
+     * Write units to table
+     *
+     * @param {HtmlElement}[]} incomings Array of incoming commands
+     * @param {String}[]} incUnits Array of incoming units
+     */
+    function writeUnits(incomings, incUnits) {
+        let myTable;
+        if (incomings[0].attributes["data-command-type"].value == "support") {
+            myTable = document.getElementById("incSupportTable");
+        } else {
+            myTable = document.getElementById("incAttackTable");
+        }
+        Object.keys(incUnits).forEach((key) => {
+            myTable.getElementsByClassName("unit-item-" + key)[0].innerText = incUnits[key];
+            if (incUnits[key] > 0) {
+                myTable.getElementsByClassName("unit-item-" + key)[0].classList.remove("hidden");
+            }
+        });
+    }
+
+})(`<h4>Incoming support</h4><span id="supportText"></span>
 <table id="incSupportTable" style="margin-bottom: 10px" class="vis" width="100%">
     <tbody>
         <tr>
@@ -128,111 +247,4 @@
             <td class="unit-item unit-item-snob hidden">0</td>
         </tr>
     </tbody>
-</table>`;
-    titleParent.append($(unitConfig));
-
-    class Units {
-        constructor(spear, sword, axe, archer, spy, light, marcher, heavy, ram, catapult, knight, snob) {
-            this.spear = spear;
-            this.sword = sword;
-            this.axe = axe;
-            this.archer = archer;
-            this.spy = spy;
-            this.light = light;
-            this.marcher = marcher;
-            this.heavy = heavy;
-            this.ram = ram;
-            this.catapult = catapult;
-            this.knight = knight;
-            this.snob = snob;
-        }
-    }
-
-
-    let attackIncs = []; // Store shared incoming attacks
-    let supportIncs = []; // Store shared incoming supports
-    let sharedSupport = false; // true if one incoming support is shared
-    let sharedAttack = false; // true if one incoming attack is shared
-
-    let table = document.querySelector(".commands-container table:nth-child(1)"); // Incoming commands table
-    // Evaluate every incoming command
-    for (let i = 2; i <= table.rows.length; i++) {
-        let inc = table.querySelector("tr.command-row:nth-child(" + i + ") > td:nth-child(1) > span:nth-child(1) > span:nth-child(1) > a:nth-child(1) > span:nth-child(1) > span:nth-child(1)");
-        if (inc.attributes["data-command-type"] == undefined) { // Don't store incoming command if not shared
-            continue;
-        } else if (inc.attributes["data-command-type"].value === "support") {
-            supportIncs.push(inc);
-            sharedSupport = true;
-        } else if (inc.attributes["data-command-type"].value === "attack") {
-            attackIncs.push(inc);
-            sharedAttack = true;
-        }
-    }
-
-    if (sharedAttack) {
-        getUnits(attackIncs);
-    }
-    if (sharedSupport) {
-        getUnits(supportIncs);
-    }
-
-    /**
-     * Calculates total amount of incoming troops
-     * @param {String[]} incomings Array of incoming commands
-     */
-    function getUnits(incomings) {
-        let type;
-        if (incomings[0].attributes["data-command-type"].value == "support") {
-            type = "support";
-        } else {
-            type = "attack";
-        }
-        let counterGetAmnt = 0; // Counts amount of processed commands
-        let incUnits = new Units(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        let timeout = 0;
-        if (incomings.length === 0) {
-            return;
-        }
-        // Get units of each incoming command
-        incomings.forEach(function (ele) {
-            let id = ele.getAttribute("data-command-id"); // Get command ID
-            timeout += Math.random() * 70 + 40;
-            // Get request for command details and extract amount of troops
-            setTimeout(function () {
-                $.get(window.location.origin + "/game.php?village=" + game_data.village.id + "&screen=info_command&ajax=details&id=" + id, function (r) {
-                    let responseUnits = JSON.parse(r).units;
-                    counterGetAmnt++;
-                    if (type === "attack") {
-                        document.getElementById("attackText").innerText = "Processing " + counterGetAmnt + "/" + incomings.length + " commands";
-                    } else {
-                        document.getElementById("supportText").innerText = "Processing " + counterGetAmnt + "/" + incomings.length + " commands";
-                    }
-                    // Add the units from the response together
-                    Object.keys(responseUnits).forEach((key) => {
-                        incUnits[key] += parseInt(responseUnits[key].count);
-                    });
-                    // If all incoming commands have been processed, write the total number of troops into the table
-                    if (counterGetAmnt == incomings.length) {
-                        writeUnits(incomings, incUnits);
-                    }
-                });
-            }, timeout)
-        });
-    }
-
-    function writeUnits(incomings, incUnits) {
-        let myTable;
-        if (incomings[0].attributes["data-command-type"].value == "support") {
-            myTable = document.getElementById("incSupportTable");
-        } else {
-            myTable = document.getElementById("incAttackTable");
-        }
-        Object.keys(incUnits).forEach((key) => {
-            myTable.getElementsByClassName("unit-item-" + key)[0].innerText = incUnits[key];
-            if (incUnits[key] > 0) {
-                myTable.getElementsByClassName("unit-item-" + key)[0].classList.remove("hidden");
-            }
-        });
-    }
-
-})();
+</table>`);
