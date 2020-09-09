@@ -15,7 +15,7 @@
  * tribalwarsbr100@gmail.com
  * https://www.youtube.com/channel/UCIngQdlpQxocFDB4Vk6yERg
  */
-(function () {
+(() => {
     'use strict';
 
     //****************************** Configuration ******************************//
