@@ -7,6 +7,8 @@
 // @icon                https://i.imgur.com/7WgHTT8.gif
 // @include             https://**.tribalwars.com.*/game.php?**&screen=main*
 // @version     	    1.0.0
+// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AutoFinishBuilding.user.js
+// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AutoFinishBuilding.user.js
 // @license             GPL-3.0
 // @grant               GM_getResourceText
 // @grant               GM_addStyle
@@ -25,8 +27,12 @@
 
     const intervalRange = Math.floor(Math.random() * (mediumDelay - delayRange / 2) + mediumDelay / 2);
 
+    console.log('its starting!!', intervalRange);
+
     // Loop
     setInterval(() => {
+
+        console.log('Haiou, silver!');
 
         const tr = $('[id="buildqueue"]').find('tr').eq(1);
         const text = tr.find('td').eq(1).find('span').eq(0).text().split(" ").join("").split("\n").join("");
