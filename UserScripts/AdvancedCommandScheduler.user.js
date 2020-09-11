@@ -18,6 +18,16 @@
     const loopStartTime = 1500;
     //*************************** End Configuration ***************************//
 
+    // Controls the window title
+    $(() => {
+        const _originalTitle = document.title;
+        $(document).on('blur', (evt) => {
+            document.title = `[SENDING_COMMAND] ${_originalTitle}`;
+        }).on('focus', (evt) => {
+            document.title = _originalTitle;
+        });
+    });
+
     const CommandSender = {
         confirmButton: null,
         duration: null,

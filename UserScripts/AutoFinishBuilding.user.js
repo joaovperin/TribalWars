@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Auto Finish Buildings
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Auto-click on the 'finish' green button (when it appears)
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -17,6 +17,16 @@
     //*************************** End Configuration ***************************//
 
     const intervalRange = Math.floor(Math.random() * (mediumDelay - delayRange / 2) + mediumDelay / 2);
+
+    // Controls the window title
+    $(() => {
+        const _originalTitle = document.title;
+        $(document).on('blur', (evt) => {
+            document.title = `[AUTO_FINISH] ${_originalTitle}`;
+        }).on('focus', (evt) => {
+            document.title = _originalTitle;
+        });
+    });
 
     // Loop
     setInterval(() => {
