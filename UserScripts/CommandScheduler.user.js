@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name                Command Scheduler
+// @name                Command Schedulerx
 // @version     	    1.0.0
-// @description         Schedule attacks and supports with maximum precision
+// @description         Schedule commands so you don't have to worry about waking up at dawn to launch your OPs
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
 // @include             https://**.tribalwars.com.*/game.php?**&screen=place*&try=confirm
@@ -19,7 +19,7 @@
     'use strict';
 
     //****************************** Configuration ******************************//
-    const defaultOffset = -1;
+    const defaultOffset = 30;
     //*************************** End Configuration ***************************//
 
     const CommandSender = {
@@ -28,21 +28,35 @@
         dateNow: null,
         offset: null,
         init: function () {
-            $($('#command-data-form').find('tbody')[0]).append('<tr><td>Chegada:</td><td> <input type="datetime-local" id="CStime" step=".001"> </td></tr><tr> <td>Offset:</td><td> <input type="number" id="CSoffset"> <button type="button" id="CSbutton" class="btn">Confirmar</button> </td></tr>');
+            // Create some Html
+            $($('#command-data-form').find('tbody')[0]).append(
+                `<tr>
+                    <td>Chegada:</td><td><input type="datetime-local" id="CStime" step=".001"></td>
+                 </tr>
+                 <tr>
+                    <td>Delay:</td>
+                    <td><input type="number" id="CSoffset"><button type="button" id="CSbutton" class="btn">Confirm</button></td>
+                 </tr>`
+            );
             this.confirmButton = $('#troop_confirm_go');
             this.duration = $('#command-data-form').find('td:contains("Duração:")').next().text().split(':').map(Number);
-            this.offset = localStorage.getItem('CS.offset') || defaultOffset + Timing.offset_from_server;
-            this.dateNow = this.convertToInput(new Date());
+            this.offset = localStorage.getItem('CS.offset') || defaultOffset;
+            this.dateNow = this.convertToInput((() => {
+                var d = new Date();
+                d.setSeconds(d.getSeconds() + 15);
+                d.setMilliseconds(501);
+                return d;
+            })());
             $('#CSoffset').val(this.offset);
             $('#CStime').val(this.dateNow);
             $('#CSbutton').click(function () {
-                var offset = Number($('#CSoffset').val());
-                var attackTime = CommandSender.getAttackTime();
-                localStorage.setItem('CS.offset', offset);
+                const attackTime = CommandSender.getAttackTime();
+                CommandSender.offset = parseInt($('#CSoffset').val());
+                localStorage.setItem('CS.offset', CommandSender.offset);
                 CommandSender.confirmButton.addClass('btn-disabled');
                 setTimeout(function () {
                     CommandSender.confirmButton.click();
-                }, attackTime - Timing.getCurrentServerTime() + offset);
+                }, attackTime - Timing.getCurrentServerTime() + CommandSender.offset);
                 this.disabled = true;
             });
         },
