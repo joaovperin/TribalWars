@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Incoming Troops
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Shows the total incoming troops (support and attack) in the village info screen
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -16,6 +16,10 @@
  */
 ((unitConfig) => {
     'use strict';
+
+    //****************************** Configuration ******************************//
+    const showHaulCapacity = true;
+    //*************************** End Configuration ***************************//
 
     const titleParent = $("#content_value > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2)");
     titleParent.append($(unitConfig));
@@ -37,6 +41,11 @@
             this.catapult = catapult;
             this.knight = knight;
             this.snob = snob;
+        }
+
+        get haul() {
+            return this.spear * 25 + this.sword * 15 + this.axe * 10 + this.archer * 10 +
+                this.light * 80 + this.marcher * 50 + this.heavy * 50 + this.knight * 100;
         }
     }
 
@@ -126,7 +135,11 @@
         } else {
             myTable = document.getElementById("incAttackTable");
         }
-        Object.keys(incUnits).forEach((key) => {
+        const thingsToShow = [...Object.keys(incUnits)];
+        if (showHaulCapacity) {
+            thingsToShow.push('haul');
+        }
+        thingsToShow.forEach((key) => {
             myTable.getElementsByClassName("unit-item-" + key)[0].innerText = incUnits[key];
             if (incUnits[key] > 0) {
                 myTable.getElementsByClassName("unit-item-" + key)[0].classList.remove("hidden");
@@ -231,6 +244,9 @@
             <th style="text-align:center" width="35">
                 <a href="#" class="unit_link" data-unit="snob"><img src="https://dsen.innogamescdn.com/asset/10d39b3d/graphic/unit/unit_snob.png" title="Nobleman" alt="Noble" class=""></a>
             </th>
+            <th style="text-align:center" width="35">
+                <a href="#" class="unit_link" data-unit="haul"><span class="icon header ressources" title="Haul Capacity"></span></a>
+            </th>
         </tr>
         <tr id="unitAmnt">
             <td class="unit-item unit-item-spear hidden">0</td>
@@ -245,6 +261,7 @@
             <td class="unit-item unit-item-catapult hidden">0</td>
             <td class="unit-item unit-item-knight hidden">0</td>
             <td class="unit-item unit-item-snob hidden">0</td>
+            <td class="unit-item unit-item-haul hidden">0</td>
         </tr>
     </tbody>
 </table>`);
