@@ -4,7 +4,7 @@
 // @description         Schedule attacks and supports, optimized for maximum precision. Uses browser serviceWorkers.
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
-// @include             https://**.tribalwars.com.*/game.php?**&screen=place*&try=confirm
+// @include             https://**.tribalwars.com.*/game.php?**&screen=place*&try=confirm*
 // @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AdvancedCommandScheduler.user.js
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AdvancedCommandScheduler.user.js
 // ==/UserScript==

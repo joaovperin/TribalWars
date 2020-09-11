@@ -5,7 +5,7 @@
 // @description         Plays chicken sound whenever there is something in the stock
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
-// @include             https://**.tribalwars.com.*/game.php?**&screen=market*&mode=exchange
+// @include             https://**.tribalwars.com.*/game.php?**&screen=market*&mode=exchange*
 // @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/PremiumExchangeAlert.user.js
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/PremiumExchangeAlert.user.js
 // ==/UserScript==

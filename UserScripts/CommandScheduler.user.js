@@ -4,7 +4,7 @@
 // @description         Schedule commands so you don't have to worry about waking up at dawn to launch your OPs
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
-// @include             https://**.tribalwars.com.*/game.php?**&screen=place*&try=confirm
+// @include             https://**.tribalwars.com.*/game.php?**&screen=place*&try=confirm*
 // @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/CommandScheduler.user.js
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/CommandScheduler.user.js
 // ==/UserScript==
