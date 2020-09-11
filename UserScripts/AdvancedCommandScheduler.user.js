@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name                Advanced Command Scheduler
-// @version     	    1.0.0
-// @description         Schedule attacks and supports, optimized for maximum precision. The browser tab needs focus!
+// @version     	    1.0.1
+// @description         Schedule attacks and supports, optimized for maximum precision. Uses browser serviceWorkers.
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
 // @include             https://**.tribalwars.com.*/game.php?**&screen=place*&try=confirm
@@ -13,7 +13,7 @@
     'use strict';
 
     //****************************** Configuration ******************************//
-    const defaultOffset = 30;
+    const defaultInternetDelay = 30;
     const worldBackwardDelay = 50;
     const loopStartTime = 1500;
     //*************************** End Configuration ***************************//
@@ -22,51 +22,49 @@
         confirmButton: null,
         duration: null,
         dateNow: null,
-        offset: null,
+        internetDelay: null,
         init: function () {
-
-            UI.InfoMessage('A ABA DEVE PERMANECER EM FOCO! CASO CONTRÁRIO, O ENVIO IRÁ FALHAR.', 3000, true);
 
             // Create some Html
             $($('#command-data-form').find('tbody')[0]).append(
                 `<tr>
-                    <td>Chegada:</td><td><input type="datetime-local" id="CStime" step=".001"></td>
+                    <td>Chegada:</td><td><input type="datetime-local" id="ACStime" step=".001"></td>
                  </tr>
                  <tr>
                     <td>Delay da internet:</td>
-                    <td><input type="number" id="CSoffset"><button type="button" id="CSbutton" class="btn">Confirm</button></td>
+                    <td><input type="number" id="ACSInternetDelay"><button type="button" id="ACSbutton" class="btn">Confirm</button></td>
                  </tr>`
             );
             this.confirmButton = $('#troop_confirm_go');
             this.duration = $('#command-data-form').find('td:contains("Duração:")').next().text().split(':').map(Number);
-            this.offset = localStorage.getItem('CS.offset') || defaultOffset;
+            this.internetDelay = localStorage.getItem('ACS.internetDelay') || defaultInternetDelay;
             this.dateNow = this.convertToInput((() => {
                 var d = new Date();
                 d.setSeconds(d.getSeconds() + 10);
                 d.setMilliseconds(501);
                 return d;
             })());
-            $('#CSoffset').val(this.offset);
-            $('#CStime').val(this.dateNow);
-            $('#CSbutton').click(function () {
+            $('#ACSInternetDelay').val(this.internetDelay);
+            $('#ACStime').val(this.dateNow);
+            $('#ACSbutton').click(function () {
                 const attackTime = CommandSender.getAttackTime();
-                CommandSender.offset = parseInt($('#CSoffset').val());
-                localStorage.setItem('CS.offset', CommandSender.offset);
+                CommandSender.internetDelay = parseInt($('#ACSInternetDelay').val());
+                localStorage.setItem('ACS.internetDelay', CommandSender.internetDelay);
                 CommandSender.confirmButton.addClass('btn-disabled');
                 // Exec asynchronous
                 setTimeout(function () {
                     console.log('Starting loop at = ', new Date().toISOString());
                     ((day, hour, minute, second, millisecond) => {
-                        console.log('CS.param.second = ', second);
-                        console.log('CS.param.millisecond = ', millisecond);
+                        console.log('ACS.param.second = ', second);
+                        console.log('ACS.param.millisecond = ', millisecond);
                         var _interval = 0;
-                        console.log('CS.offset = ', CommandSender.offset);
-                        console.log('CS.offsetFromServer = ', Timing.offset_from_server);
+                        console.log('ACS.internetDelay = ', CommandSender.internetDelay);
+                        console.log('ACS.offsetFromServer = ', Timing.offset_from_server);
                         var _nextFn = () => {
-                            const realOffset = parseInt(CommandSender.offset) - worldBackwardDelay;
-                            console.log('CS.realOffset = ', realOffset);
+                            const realOffset = parseInt(CommandSender.internetDelay) - worldBackwardDelay;
+                            console.log('ACS.realOffset = ', realOffset);
                             if (CommandSender.createServerDate(realOffset).getSeconds() >= second) {
-                                console.log('CS.second = ', second, '. Waiting for command...');
+                                console.log('ACS.second = ', second, '. Waiting for command...');
                                 // Calculate the real Offset
                                 _nextFn = () => {
                                     const realDate = CommandSender.createServerDate(realOffset);
@@ -90,9 +88,19 @@
                         // RUN, Barry, Run!
                         (() => {
                             console.log('LOOP STARING AT = ', new Date(Timing.getCurrentServerTime()).toISOString());
-                            for (let i = 0; i < loopStartTime + 500; i++) {
-                                setTimeout(() => _nextFn(), i);
+                            const blob = new Blob([`
+                                setInterval(() => postMessage(''));
+                            `]);
+                            const worker = new Worker(window.URL.createObjectURL(blob));
+                            let _is_Done = false;
+                            worker.onmessage = function () {
+                                if (_is_Done) {
+                                    UI.Notification.show("https://dsbr.innogamescdn.com/asset/c092731a/graphic/unit/recruit/axe.png", 'Parabéns!', 'Seu comando foi enviado com sucesso!');
+                                    return worker.terminate();
+                                }
+                                _is_Done = _nextFn();
                             }
+
                         })();
                     })(
                         /* Day, Hour, Minute, Second, ms */
@@ -108,7 +116,7 @@
             });
         },
         getAttackTime: function () {
-            var d = new Date($('#CStime').val().replace('T', ' '));
+            var d = new Date($('#ACStime').val().replace('T', ' '));
             d.setHours(d.getHours() - this.duration[0]);
             d.setMinutes(d.getMinutes() - this.duration[1]);
             d.setSeconds(d.getSeconds() - this.duration[2]);
@@ -155,7 +163,7 @@
         }
     };
 
-    CommandSender.addGlobalStyle('#CStime, #CSoffset {font-size: 9pt;font-family: Verdana,Arial;}#CSbutton {float:right;}');
+    CommandSender.addGlobalStyle('#ACStime, #ACSInternetDelay {font-size: 9pt;font-family: Verdana,Arial;}#ACSbutton {float:right;}');
     // Start in a loop for faster loading
     const _temporaryLoop = setInterval(function () {
         if (document.getElementById('command-data-form') && jQuery) {
