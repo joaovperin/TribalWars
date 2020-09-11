@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Attack Identifier
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Identify incoming attacks for you
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -21,6 +21,16 @@
     const mediumReloadTime = 10000;
     const reloadTimeRange = 300;
     //*************************** End Configuration ***************************//
+
+    // Controls the window title
+    $(() => {
+        const _originalTitle = document.title;
+        $(document).on('blur', (evt) => {
+            document.title = `[IDENTIFIER] ${_originalTitle}`;
+        }).on('focus', (evt) => {
+            document.title = _originalTitle;
+        });
+    });
 
     // Update page
     const intervalRange = Math.floor(Math.random() * (mediumReloadTime - reloadTimeRange / 2) + mediumReloadTime / 2);

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Scavenging
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Scavenge for resources automaically
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -21,6 +21,16 @@
  */
 (() => {
     'use strict';
+
+    // Controls the window title
+    $(() => {
+        const _originalTitle = document.title;
+        $(document).on('blur', (evt) => {
+            document.title = `[SCAVENGING] ${_originalTitle}`;
+        }).on('focus', (evt) => {
+            document.title = _originalTitle;
+        });
+    });
 
     const gameData = TribalWars.getGameData();
     const tag = gameData.world + '' + gameData.player.name + '' + gameData.screen + '_' + gameData.mode;

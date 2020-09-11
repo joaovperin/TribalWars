@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Farming
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Farm automaically for resources
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -14,6 +14,16 @@
  */
 (() => {
     'use strict';
+
+    // Controls the window title
+    $(() => {
+        const _originalTitle = document.title;
+        $(document).on('blur', (evt) => {
+            document.title = `[FARMING] ${_originalTitle}`;
+        }).on('focus', (evt) => {
+            document.title = _originalTitle;
+        });
+    });
 
     // Create global variables
     let maxDistanceA = localStorage.maxDistanceA; // Maximum farm distance for button A

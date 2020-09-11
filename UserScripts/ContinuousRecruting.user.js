@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Continuous Recruiting
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Auto-recruit units if there's no one on the queue
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -18,6 +18,16 @@
     //****************************** Configuration ******************************//
     const reloadInterval = 15 * 60 * 1000;
     //*************************** End Configuration ***************************//
+
+    // Controls the window title
+    $(() => {
+        const _originalTitle = document.title;
+        $(document).on('blur', (evt) => {
+            document.title = `[RECRUITING] ${_originalTitle}`;
+        }).on('focus', (evt) => {
+            document.title = _originalTitle;
+        });
+    });
 
     const addGlobalStyle = (css) => {
         var style = document.createElement('style');

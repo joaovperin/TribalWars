@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Premium Exchange - Alert Resources
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Shows the total incoming troops (support and attack) in the village info screen
 // @description         Plays chicken sound whenever there is something in the stock
 // @author              joaovperin
@@ -24,6 +24,16 @@
     const showVariation = true;
     const showCurrent = false;
     //*************************** End Configuration ***************************//
+
+    // Controls the window title
+    $(() => {
+        const _originalTitle = document.title;
+        $(document).on('blur', (evt) => {
+            document.title = `[PREMIUM_ALERT] ${_originalTitle}`;
+        }).on('focus', (evt) => {
+            document.title = _originalTitle;
+        });
+    });
 
     let woodOld = parseInt(document.getElementById("premium_exchange_stock_wood").textContent);
     let stoneOld = parseInt(document.getElementById("premium_exchange_stock_stone").textContent);
