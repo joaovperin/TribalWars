@@ -4,7 +4,7 @@
 // @description         Identify incoming attacks for you
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
-// @include             https://**.tribalwars.com.*/game.php?**&mode=incomings**&subtype=attacks**
+// @include             https://**.tribalwars.com.*/game.php?**&mode=incomings**&subtype=attacks*
 // @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AttackIdentifier.user.js
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AttackIdentifier.user.js
 // ==/UserScript==
