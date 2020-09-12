@@ -10,6 +10,9 @@ if (!window.TwFramework) {
 (() => {
     'use strict';
 
+    // Namespace/module
+    const ModuleName = 'event.event-utils';
+
     // Public API
     $.extend(window.TwFramework, {
         onVisibilityChange: (callback) => _visibilityChangeListeners.push(callback)
