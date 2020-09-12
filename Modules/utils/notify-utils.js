@@ -61,7 +61,7 @@ new Promise(exportModule => {
                         url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`,
                         dataType: "text"
                     })
-                    .done(res => resolve(await eval(res)))
+                    .done(res => resolve(eval(res)))
                     .fail(req => reject(console.error("Fail loading module '", name, "'.")));
             })
         }
