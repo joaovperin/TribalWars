@@ -7,16 +7,8 @@ if (!window.TwFramework) {
     window.TwFramework = {}
 }
 
-(async (ModuleLoader) => {
-
-    await ModuleLoader.load('utils/event-utils');
-
-    const ModuleName = 'event-utils';
-    const _oldTitle = document.title;
-    TwFramework.onVisibilityChange(evt => {
-        if (evt.hasFocus) document.title = _oldTitle;
-        if (!evt.hasFocus) document.title = '[OI] ' + _oldTitle;
-    });
+(() => {
+    'use strict';
 
     // Public API
     $.extend(window.TwFramework, {
@@ -81,13 +73,4 @@ if (!window.TwFramework) {
 
     console.log("[TwFramework] ~> Module '", ModuleName, "' successfully loaded!");
     return true;
-})({
-    loadModule: name => {
-        const modulePath = name.replace('.', '/');
-        return $.ajax({
-            method: "GET",
-            url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Framework/${modulePath}.js`,
-            dataType: "text"
-        }).done(res => eval(res)).fail(req => console.error("Fail loading module '", name, "'."));
-    }
-});
+})();
