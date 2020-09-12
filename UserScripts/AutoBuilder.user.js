@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Auto Builder
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Put things on the building queue, automatically
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -15,10 +15,17 @@
 (async (ModuleLoader) => {
     'use strict';
 
+    // Dependency loading
+    await ModuleLoader.loadModule('utils/notify-utils');
+
+    // Controls the window title
+    TwFramework.setIdleTitlePreffix('BUILDING', document.title);
+
     let buildingObject;
     let selection;
     let scriptStatus = false; // false == script not running, true == script running
     let isBuilding = false; // Prevents sending multiple orders of the same building. false == building can be built
+
 
     class BQueue {
         constructor(bQueue, bQueueLength) {
@@ -326,4 +333,19 @@
         }
     }
 
-})();
+})({
+    // ModuleLoader functions
+    loadModule: moduleName => {
+        return new Promise((resolve, reject) => {
+            const modulePath = moduleName.replace('.', '/');
+            const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
+            console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
+            return $.ajax({
+                    method: "GET",
+                    url: moduleUrl,
+                    dataType: "text"
+                }).done(res => resolve(eval(res)))
+                .fail(req => reject(console.error("[TwScripts] Fail loading module '", moduleName, "'.")));
+        })
+    }
+});

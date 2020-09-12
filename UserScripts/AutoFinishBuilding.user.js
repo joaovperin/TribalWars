@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Auto Finish Buildings
-// @version     	    1.0.3
+// @version     	    1.0.4
 // @description         Auto-click on the 'finish' green button (when it appears)
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -9,7 +9,7 @@
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/AutoFinishBuilding.user.js
 // ==/UserScript==
 
-(async (ModuleLoader) => {
+(async () => {
     'use strict';
     //****************************** Configuration ******************************//
     const mediumDelay = 1000;
@@ -17,12 +17,6 @@
     //*************************** End Configuration ***************************//
 
     const intervalRange = Math.floor(Math.random() * (mediumDelay - delayRange / 2) + mediumDelay / 2);
-
-    // Dependency loading
-    await ModuleLoader.loadModule('utils/notify-utils');
-
-    // Controls the window title
-    TwFramework.setIdleTitlePreffix('AUTO_FINISH', document.title);
 
     // Loop
     setInterval(() => {
@@ -39,19 +33,4 @@
         $('[class="btn btn-confirm-yes"]').click();
     }, intervalRange);
 
-})({
-    // ModuleLoader functions
-    loadModule: moduleName => {
-        return new Promise((resolve, reject) => {
-            const modulePath = moduleName.replace('.', '/');
-            const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
-            console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
-            return $.ajax({
-                    method: "GET",
-                    url: moduleUrl,
-                    dataType: "text"
-                }).done(res => resolve(eval(res)))
-                .fail(req => reject(console.error("[TwScripts] Fail loading module '", moduleName, "'.")));
-        })
-    }
-});
+})();
