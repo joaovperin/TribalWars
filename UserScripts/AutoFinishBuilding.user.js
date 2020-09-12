@@ -9,7 +9,7 @@
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AutoFinishBuilding.user.js
 // ==/UserScript==
 
-(() => {
+(async (ModuleLoader) => {
     'use strict';
     //****************************** Configuration ******************************//
     const mediumDelay = 1000;
@@ -18,15 +18,16 @@
 
     const intervalRange = Math.floor(Math.random() * (mediumDelay - delayRange / 2) + mediumDelay / 2);
 
+    // Dependency loading
+    await ModuleLoader.loadModule('utils/event-utils');
+
     // Controls the window title
-    $(() => {
-        const _originalTitle = document.title;
-        $(document).on('blur', (evt) => {
-            document.title = `[AUTO_FINISH] ${_originalTitle}`;
-        }).on('focus', (evt) => {
-            document.title = _originalTitle;
-        });
+    const _originalTitle = document.title;
+    TwFramework.onVisibilityChange(evt => {
+        if (evt.hasFocus) document.title = _originalTitle;
+        else document.title = `[AUTO_FINISH] ${_originalTitle}`;
     });
+
 
     // Loop
     setInterval(() => {
@@ -44,4 +45,19 @@
 
     }, intervalRange);
 
-})();
+})({
+    // ModuleLoader functions
+    loadModule: moduleName => {
+        const modulePath = moduleName.replace('.', '/');
+        const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
+        console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
+        return $.ajax({
+            method: "GET",
+            url: moduleUrl,
+            dataType: "text"
+        }).done(res => {
+            console.debug(res);
+            eval(res);
+        }).fail(req => console.error("[TwScripts] Fail loading module '", moduleName, "'."));
+    }
+});
