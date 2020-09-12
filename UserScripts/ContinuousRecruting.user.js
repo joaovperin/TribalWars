@@ -5,8 +5,8 @@
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
 // @include             https://**.tribalwars.com.*/game.php?**&screen=train*
-// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/ContinuousRecruting.user.user.js
-// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/ContinuousRecruting.user.user.js
+// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/ContinuousRecruting.user.user.js
+// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/ContinuousRecruting.user.user.js
 // ==/UserScript==
 
 /**

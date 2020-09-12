@@ -58,7 +58,6 @@ if (!window.TwFramework) {
                 evt.windowStatus = evtMap[evt.type];
             else
                 evt.windowStatus = this[hidden] ? "hidden" : "visible";
-            document.body.className = evt.windowStatus;
             // Fire event listeners assynchronously
             const _evtData = {
                 hasFocus: (evt.windowStatus === 'visible')

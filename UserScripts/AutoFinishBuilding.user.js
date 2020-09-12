@@ -5,8 +5,8 @@
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
 // @include             https://**.tribalwars.com.*/game.php?**&screen=main*
-// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AutoFinishBuilding.user.js
-// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AutoFinishBuilding.user.js
+// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/AutoFinishBuilding.user.js
+// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/AutoFinishBuilding.user.js
 // ==/UserScript==
 
 (async (ModuleLoader) => {

@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name                Scavenging
 // @version     	    1.0.2
-// @description         Scavenge for resources automaically
+// @description         Scavenge for resources automatically
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
 // @include             https://**.tribalwars.com.*/game.php?**&mode=scavenge*
-// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/Scavenging.user.js
-// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/Scavenging.user.js
+// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/Scavenging.user.js
+// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/Scavenging.user.js
 //
 // @grant GM_setValue
 // @grant GM_getValue

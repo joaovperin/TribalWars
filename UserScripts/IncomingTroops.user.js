@@ -5,8 +5,8 @@
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
 // @include             https://**.tribalwars.com.*/game.php?**&screen=info_village*
-// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/IncomingTroops.user.js
-// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/IncomingTroops.user.js
+// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/IncomingTroops.user.js
+// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/IncomingTroops.user.js
 // ==/UserScript==
 
 /**
