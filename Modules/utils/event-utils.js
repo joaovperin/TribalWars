@@ -7,7 +7,7 @@ if (!window.TwFramework) {
     window.TwFramework = {}
 }
 new Promise(exportModule => {
-    (() => {
+    (async () => {
         'use strict';
 
         // Namespace/module
@@ -21,8 +21,8 @@ new Promise(exportModule => {
         const _visibilityChangeListeners = [];
 
         // Visibility change checker
-        (function (_onChangeFn) {
-            var hidden = "hidden";
+        (function () {
+            let hidden = "hidden";
 
             // Standards:
             if (hidden in document)
@@ -41,7 +41,7 @@ new Promise(exportModule => {
                 window.onpageshow = window.onpagehide = window.onfocus = window.onblur = onchange;
 
             function onchange(evt) {
-                var v = "visible",
+                let v = "visible",
                     h = "hidden",
                     evtMap = {
                         focus: v,
@@ -70,10 +70,9 @@ new Promise(exportModule => {
                 onchange({
                     type: document[hidden] ? "blur" : "focus"
                 });
-            return exportModule(true);
         })();
 
         console.log("[TwFramework] ~> Module '", ModuleName, "' successfully loaded!");
-        return true;
+        return exportModule(true);
     })();
 });

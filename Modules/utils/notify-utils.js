@@ -7,8 +7,8 @@ if (!window.TwFramework) {
     window.TwFramework = {}
 }
 new Promise(exportModule => {
-
     (async (ModuleLoader) => {
+        'use strict';
 
         // Namespace/module
         const ModuleName = 'utils.notify-utils';
@@ -25,12 +25,12 @@ new Promise(exportModule => {
                 if (_Configurations.setIdleTitlePreffix) {
                     return console.error('Cannot set idle title 2 times!');
                 }
-                _Configurations.setIdleTitlePreffix = {};
+                _Configurations.idleTitlePreffix = originalTitle;
 
                 // Update title with preffix
                 const _updateTitlefn = evt => {
                     if (!evt) return;
-                    const _originalTitle = _Configurations.setIdleTitlePreffix.originalTitle;
+                    const _originalTitle = _Configurations.idleTitlePreffix;
                     if (evt.hasFocus) document.title = _originalTitle;
                     else document.title = `[${preffix}] ${_originalTitle}`;
                 };
@@ -39,13 +39,6 @@ new Promise(exportModule => {
                 TwFramework.onVisibilityChange(_updateTitlefn);
                 _updateTitlefn({
                     hasFocus: false
-                });
-
-                // Saves settings on the global scope
-                $.extend(_Configurations, {
-                    setIdleTitlePreffix: {
-                        originalTitle: originalTitle
-                    }
                 });
             }
         });
@@ -59,13 +52,12 @@ new Promise(exportModule => {
             return new Promise((resolve, reject) => {
                 $.ajax({
                         method: "GET",
-                        url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`,
-                        dataType: "text"
+                        dataType: "text",
+                        url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`
                     })
                     .done(res => resolve(eval(res)))
                     .fail(req => reject(console.error("Fail loading module '", name, "'.")));
             })
         }
     });
-
 });
