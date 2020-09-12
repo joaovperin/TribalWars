@@ -23,14 +23,10 @@
     'use strict';
 
     // Dependency loading
-    await ModuleLoader.loadModule('utils/event-utils');
+    await ModuleLoader.loadModule('utils/notify-utils');
 
     // Controls the window title
-    const _originalTitle = document.title;
-    TwFramework.onVisibilityChange(evt => {
-        if (evt.hasFocus) document.title = _originalTitle;
-        else document.title = `[SCAVENGING] ${_originalTitle}`;
-    });
+    TwFramework.setIdleTitlePreffix('SCAVENGING', document.title);
 
     const gameData = TribalWars.getGameData();
     const tag = gameData.world + '' + gameData.player.name + '' + gameData.screen + '_' + gameData.mode;
