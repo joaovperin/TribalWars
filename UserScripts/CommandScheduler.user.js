@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Command Schedulerx
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Schedule commands so you don't have to worry about waking up at dawn to launch your OPs
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -21,6 +21,8 @@
     //****************************** Configuration ******************************//
     const defaultOffset = 30;
     //*************************** End Configuration ***************************//
+
+    console.warn('This script is deprecated! Use AdvancedCommandScheduler.user.js instead.');
 
     const CommandSender = {
         confirmButton: null,

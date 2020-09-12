@@ -33,12 +33,17 @@
 
 })({
     // ModuleLoader functions
-    loadModule: name => {
-        const modulePath = name.replace('.', '/');
+    loadModule: moduleName => {
+        const modulePath = moduleName.replace('.', '/');
+        const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/stable/Modules/${modulePath}.js`;
+        console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
         return $.ajax({
             method: "GET",
-            url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Framework/${modulePath}.js`,
+            url: moduleUrl,
             dataType: "text"
-        }).done(res => eval(res)).fail(req => console.error("Fail loading module '", name, "'."));
+        }).done(res => {
+            console.debug(res);
+            eval(res);
+        }).fail(req => console.error("[TwScripts] Fail loading module '", moduleName, "'."));
     }
 });

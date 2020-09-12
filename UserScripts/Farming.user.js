@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Farming
-// @version     	    1.0.2
+// @version     	    1.0.4
 // @description         Farm automaically for resources
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -16,14 +16,10 @@
     'use strict';
 
     // Dependency loading
-    await ModuleLoader.loadModule('utils/event-utils');
+    await ModuleLoader.loadModule('utils/notify-utils');
 
     // Controls the window title
-    const _originalTitle = document.title;
-    TwFramework.onVisibilityChange(evt => {
-        if (evt.hasFocus) document.title = _originalTitle;
-        else document.title = `[FARMING] ${_originalTitle}`;
-    });
+    TwFramework.setIdleTitlePreffix('FARMING', document.title);
 
     // Create global variables
     let maxDistanceA = localStorage.maxDistanceA; // Maximum farm distance for button A
@@ -344,13 +340,7 @@
             return; // Should do nothing if the default action has been cancelled
         }
         let handled = false;
-        if (event.key === key) {
-            document.querySelector(selector).click();
-            handled = true;
-        } else if (event.keyIdentifier === key) {
-            document.querySelector(selector).click();
-            handled = true;
-        } else if (event.keyCode === key) {
+        if (event.key === key || event.keyIdentifier === key || event.keyCode) {
             document.querySelector(selector).click();
             handled = true;
         }
@@ -388,16 +378,16 @@
 })({
     // ModuleLoader functions
     loadModule: moduleName => {
-        const modulePath = moduleName.replace('.', '/');
-        const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
-        console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
-        return $.ajax({
-            method: "GET",
-            url: moduleUrl,
-            dataType: "text"
-        }).done(res => {
-            console.debug(res);
-            eval(res);
-        }).fail(req => console.error("[TwScripts] Fail loading module '", moduleName, "'."));
+        return new Promise((resolve, reject) => {
+            const modulePath = moduleName.replace('.', '/');
+            const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
+            console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
+            return $.ajax({
+                    method: "GET",
+                    url: moduleUrl,
+                    dataType: "text"
+                }).done(res => resolve(eval(res)))
+                .fail(req => reject(console.error("[TwScripts] Fail loading module '", moduleName, "'.")));
+        })
     }
 });
