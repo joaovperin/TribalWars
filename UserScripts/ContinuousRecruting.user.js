@@ -16,7 +16,8 @@
     'use strict';
 
     //****************************** Configuration ******************************//
-    const reloadInterval = 15 * 60 * 1000;
+    const reloadInterval = 25 * 60 * 1000;
+    const minimumQueueSize = 2;
     //*************************** End Configuration ***************************//
 
     // Append unit configurations on the screen
@@ -61,7 +62,7 @@
                 }
                 input.val('');
                 // If there's no recruit order already on the queue
-                if ($(`.unit_sprite_smaller.${key}`).length <= 0) {
+                if ($(`.unit_sprite_smaller.${key}`).length < minimumQueueSize) {
                     input.val(unitData[key]);
                     // Can recruit!
                     if (input[0].style.color === 'black') {
