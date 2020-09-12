@@ -19,17 +19,17 @@
 /**
  * THIS SCRIPT WAS FORKED FROM TavinhuTurbinator!! Turbinando TW. All credits to him!
  */
-(() => {
+(async (ModuleLoader) => {
     'use strict';
 
+    // Dependency loading
+    await ModuleLoader.loadModule('utils/event-utils');
+
     // Controls the window title
-    $(() => {
-        const _originalTitle = document.title;
-        $(document).on('blur', (evt) => {
-            document.title = `[SCAVENGING] ${_originalTitle}`;
-        }).on('focus', (evt) => {
-            document.title = _originalTitle;
-        });
+    const _originalTitle = document.title;
+    TwFramework.onVisibilityChange(evt => {
+        if (window.hasFocus) document.title = _originalTitle;
+        else document.title = `[SCAVENGING] ${_originalTitle}`;
     });
 
     const gameData = TribalWars.getGameData();
@@ -209,4 +209,14 @@
         timeOver();
     }
 
-})();
+})({
+    // ModuleLoader functions
+    loadModule: name => {
+        const modulePath = name.replace('.', '/');
+        return $.ajax({
+            method: "GET",
+            url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Framework/${modulePath}.js`,
+            dataType: "text"
+        }).done(res => eval(res)).fail(req => console.error("Fail loading module '", name, "'."));
+    }
+});
