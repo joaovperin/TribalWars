@@ -54,10 +54,14 @@ if (!window.TwFramework) {
 })({
     loadModule: async name => {
         const modulePath = name.replace('.', '/');
-        return await $.ajax({
-            method: "GET",
-            url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`,
-            dataType: "text"
-        }).done(async res => await eval(res)).fail(req => console.error("Fail loading module '", name, "'."));
+        return await new Promise((resolve, reject) => {
+            $.ajax({
+                    method: "GET",
+                    url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`,
+                    dataType: "text"
+                })
+                .done(async res => resolve(await eval(res)))
+                .fail(req => reject(console.error("Fail loading module '", name, "'.")));
+        })
     }
 });
