@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Scavenging
-// @version     	    1.0.3
+// @version     	    1.0.4
 // @description         Scavenge for resources automatically
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif

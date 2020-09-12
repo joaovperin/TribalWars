@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Continuous Recruiting
-// @version     	    1.0.2
+// @version     	    1.0.3
 // @description         Auto-recruit units if there's no one on the queue
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif

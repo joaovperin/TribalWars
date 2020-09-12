@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Attack Identifier
-// @version     	    1.0.2
+// @version     	    1.0.3
 // @description         Identify incoming attacks for you
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif

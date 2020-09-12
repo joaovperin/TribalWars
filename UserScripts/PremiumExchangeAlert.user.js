@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Premium Exchange - Alert Resources
-// @version     	    1.0.2
+// @version     	    1.0.3
 // @description         Shows the total incoming troops (support and attack) in the village info screen
 // @description         Plays chicken sound whenever there is something in the stock
 // @author              joaovperin
