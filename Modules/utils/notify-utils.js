@@ -58,6 +58,6 @@ if (!window.TwFramework) {
             method: "GET",
             url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`,
             dataType: "text"
-        }).done(async res => eval(res)).fail(req => console.error("Fail loading module '", name, "'."));
+        }).done(async res => await eval(res)).fail(req => console.error("Fail loading module '", name, "'."));
     }
 });
