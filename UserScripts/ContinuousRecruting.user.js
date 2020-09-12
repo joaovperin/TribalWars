@@ -96,17 +96,17 @@
 })({
     // ModuleLoader functions
     loadModule: moduleName => {
-        const modulePath = moduleName.replace('.', '/');
-        const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
-        console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
-        return $.ajax({
-            method: "GET",
-            url: moduleUrl,
-            dataType: "text"
-        }).done(res => {
-            console.debug(res);
-            eval(res);
-        }).fail(req => console.error("[TwScripts] Fail loading module '", moduleName, "'."));
+        return new Promise((resolve, reject) => {
+            const modulePath = moduleName.replace('.', '/');
+            const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
+            console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
+            return $.ajax({
+                    method: "GET",
+                    url: moduleUrl,
+                    dataType: "text"
+                }).done(res => resolve(eval(res)))
+                .fail(req => reject(console.error("[TwScripts] Fail loading module '", moduleName, "'.")));
+        })
     }
 }, `<div class="CS-rcontainer"><h3>Configurar auto-recrutamento</h3>
 <table id="CS-rtable" style="margin-bottom: 10px" class="vis" width="100%">
