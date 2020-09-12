@@ -9,7 +9,7 @@
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/stable/UserScripts/AdvancedCommandScheduler.user.js
 // ==/UserScript==
 
-(() => {
+(async (ModuleLoader) => {
     'use strict';
 
     //****************************** Configuration ******************************//
@@ -18,14 +18,14 @@
     const loopStartTime = 1500;
     //*************************** End Configuration ***************************//
 
+    // Dependency loading
+    await ModuleLoader.loadModule('utils/event-utils');
+
     // Controls the window title
-    $(() => {
-        const _originalTitle = document.title;
-        $(document).on('blur', (evt) => {
-            document.title = `[SENDING_COMMAND] ${_originalTitle}`;
-        }).on('focus', (evt) => {
-            document.title = _originalTitle;
-        });
+    const _originalTitle = document.title;
+    TwFramework.onVisibilityChange(evt => {
+        if (evt.hasFocus) document.title = _originalTitle;
+        else document.title = `[SENDING_COMMAND] ${_originalTitle}`;
     });
 
     const CommandSender = {
@@ -182,4 +182,19 @@
         }
     }, 1);
 
-})();
+})({
+    // ModuleLoader functions
+    loadModule: moduleName => {
+        const modulePath = moduleName.replace('.', '/');
+        const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
+        console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
+        return $.ajax({
+            method: "GET",
+            url: moduleUrl,
+            dataType: "text"
+        }).done(res => {
+            console.debug(res);
+            eval(res);
+        }).fail(req => console.error("[TwScripts] Fail loading module '", moduleName, "'."));
+    }
+});

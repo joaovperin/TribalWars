@@ -12,21 +12,21 @@
 /**
  * THIS SCRIPT WAS based on a Script from Victor Garé, but was totally remade. The credits are mine :P
  */
-((unitConfig) => {
+(async (ModuleLoader, unitConfig) => {
     'use strict';
 
     //****************************** Configuration ******************************//
     const reloadInterval = 15 * 60 * 1000;
     //*************************** End Configuration ***************************//
 
+    // Dependency loading
+    await ModuleLoader.loadModule('utils/event-utils');
+
     // Controls the window title
-    $(() => {
-        const _originalTitle = document.title;
-        $(document).on('blur', (evt) => {
-            document.title = `[RECRUITING] ${_originalTitle}`;
-        }).on('focus', (evt) => {
-            document.title = _originalTitle;
-        });
+    const _originalTitle = document.title;
+    TwFramework.onVisibilityChange(evt => {
+        if (evt.hasFocus) document.title = _originalTitle;
+        else document.title = `[RECRUITING] ${_originalTitle}`;
     });
 
     const addGlobalStyle = (css) => {
@@ -97,8 +97,22 @@
     // border-radius: 22px;
     // padding: 0px 8px;
     // margin-top: 5px;
-
-})(`<div class="CS-rcontainer"><h3>Configurar auto-recrutamento</h3>
+})({
+    // ModuleLoader functions
+    loadModule: moduleName => {
+        const modulePath = moduleName.replace('.', '/');
+        const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
+        console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
+        return $.ajax({
+            method: "GET",
+            url: moduleUrl,
+            dataType: "text"
+        }).done(res => {
+            console.debug(res);
+            eval(res);
+        }).fail(req => console.error("[TwScripts] Fail loading module '", moduleName, "'."));
+    }
+}, `<div class="CS-rcontainer"><h3>Configurar auto-recrutamento</h3>
 <table id="CS-rtable" style="margin-bottom: 10px" class="vis" width="100%">
     <tbody>
         <tr>

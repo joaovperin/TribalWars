@@ -14,7 +14,7 @@
 /**
  * THIS SCRIPT WAS FORKED FROM FunnyPocketBook. All credits to him!
  */
-(() => {
+(async (ModuleLoader) => {
     'use strict';
 
     //****************************** Configuration ******************************//
@@ -25,14 +25,14 @@
     const showCurrent = false;
     //*************************** End Configuration ***************************//
 
+    // Dependency loading
+    await ModuleLoader.loadModule('utils/event-utils');
+
     // Controls the window title
-    $(() => {
-        const _originalTitle = document.title;
-        $(document).on('blur', (evt) => {
-            document.title = `[PREMIUM_ALERT] ${_originalTitle}`;
-        }).on('focus', (evt) => {
-            document.title = _originalTitle;
-        });
+    const _originalTitle = document.title;
+    TwFramework.onVisibilityChange(evt => {
+        if (evt.hasFocus) document.title = _originalTitle;
+        else document.title = `[PREMIUM_ALERT] ${_originalTitle}`;
     });
 
     let woodOld = parseInt(document.getElementById("premium_exchange_stock_wood").textContent);
@@ -77,4 +77,19 @@
 
     return _checkResourcesThread;
 
-})();
+})({
+    // ModuleLoader functions
+    loadModule: moduleName => {
+        const modulePath = moduleName.replace('.', '/');
+        const moduleUrl = `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`;
+        console.debug('[TwScripts] Loading ', modulePath, ' from URL ', moduleUrl, '...');
+        return $.ajax({
+            method: "GET",
+            url: moduleUrl,
+            dataType: "text"
+        }).done(res => {
+            console.debug(res);
+            eval(res);
+        }).fail(req => console.error("[TwScripts] Fail loading module '", moduleName, "'."));
+    }
+});
