@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Farming
-// @version     	    1.0.2
+// @version     	    1.0.3
 // @description         Farm automaically for resources
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -20,10 +20,16 @@
 
     // Controls the window title
     const _originalTitle = document.title;
-    TwFramework.onVisibilityChange(evt => {
+    const _updateTitlefn = evt => {
         if (evt.hasFocus) document.title = _originalTitle;
         else document.title = `[FARMING] ${_originalTitle}`;
-    });
+    };
+    $(() => {
+        TwFramework.onVisibilityChange(_updateTitlefn);
+        _updateTitlefn({
+            hasFocus: false
+        });
+    })
 
     // Create global variables
     let maxDistanceA = localStorage.maxDistanceA; // Maximum farm distance for button A
