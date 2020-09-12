@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Farming
-// @version     	    1.0.1
+// @version     	    1.0.2
 // @description         Farm automaically for resources
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Auto Finish Buildings
-// @version     	    1.0.1
+// @version     	    1.0.2
 // @description         Auto-click on the 'finish' green button (when it appears)
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
