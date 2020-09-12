@@ -25,6 +25,7 @@ new Promise(exportModule => {
                 if (_Configurations.setIdleTitlePreffix) {
                     return console.error('Cannot set idle title 2 times!');
                 }
+                _Configurations.setIdleTitlePreffix = {};
 
                 // Update title with preffix
                 const _updateTitlefn = evt => {
