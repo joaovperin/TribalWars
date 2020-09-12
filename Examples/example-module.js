@@ -31,9 +31,9 @@ if (!window.TwFramework) {
     console.log("[TwFramework] ~> Module '", ModuleName, "' successfully loaded!");
     return true;
 })({
-    loadModule: name => {
+    loadModule: async name => {
         const modulePath = name.replace('.', '/');
-        return $.ajax({
+        return await $.ajax({
             method: "GET",
             url: `https://raw.githubusercontent.com/joaovperin/TribalWars/master/Modules/${modulePath}.js`,
             dataType: "text"
