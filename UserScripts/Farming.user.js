@@ -340,13 +340,7 @@
             return; // Should do nothing if the default action has been cancelled
         }
         let handled = false;
-        if (event.key === key) {
-            document.querySelector(selector).click();
-            handled = true;
-        } else if (event.keyIdentifier === key) {
-            document.querySelector(selector).click();
-            handled = true;
-        } else if (event.keyCode === key) {
+        if (event.key === key || event.keyIdentifier === key || event.keyCode) {
             document.querySelector(selector).click();
             handled = true;
         }

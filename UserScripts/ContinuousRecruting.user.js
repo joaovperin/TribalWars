@@ -19,6 +19,9 @@
     const reloadInterval = 15 * 60 * 1000;
     //*************************** End Configuration ***************************//
 
+    // Append unit configurations on the screen
+    $("#content_value > p").append($(unitConfig));
+
     // Dependency loading
     await ModuleLoader.loadModule('utils/notify-utils');
 
@@ -31,10 +34,8 @@
         style.innerHTML = css;
         document.getElementsByTagName('head')[0].appendChild(style);
     }
-    addGlobalStyle('#CS-rtable td {text-align:center;} #CS-rtable #un_qtds td {width:20px;} .CS-rcontainer {padding: 20px 0px; margin: 0;} input.CS-ri{width: 50px;}');
+    addGlobalStyle('#CR-rtable td {text-align:center;} #CR-rtable #un_qtds td {width:20px;} .CR-rcontainer {padding: 20px 0px; margin: 0;} input.CR-ri{width: 50px;}');
 
-    const titleParent = $("#content_value > p");
-    titleParent.append($(unitConfig));
 
     const unitData = {
         'spear': 0,
@@ -48,6 +49,7 @@
         'snob': 0
     };
 
+    // Try to recruit
     const _recruitIfPossible = () => {
         let canRecruit = false;
         Object.keys(unitData)
@@ -76,12 +78,44 @@
         }
     };
 
-    $(document).ready(function () {
+    // Load entries or default from localStorage
+    const _loadValues = () => {
         Object.keys(unitData).forEach(key => {
-            if (unitData[key] > 0) {
-                $(`#CR-u-${key}`).val(unitData[key]);
-            }
+            const localStorageKey = `TwFramework.CR.${key}`;
+            unitData[key] = localStorage.getItem(localStorageKey) || unitData[key];
+            // Write on the screen
+            $(`#CR-u-${key}`).val(unitData[key] > 0 ? unitData[key] : '');
         });
+    };
+
+    // Load entries on the localStorage
+    const _saveValues = () => {
+        Object.keys(unitData).forEach(key => {
+            const localStorageKey = `TwFramework.CR.${key}`;
+            localStorage.setItem(localStorageKey, unitData[key]);
+        });
+    }
+
+    $(() => {
+        _loadValues();
+        Object.keys(unitData).forEach(key => {
+            // Updates value on memory
+            $(`#CR-u-${key}`).change(evt => {
+                unitData[key] = evt.target.value;
+            })
+        });
+
+        // Writes everything on the screen
+        $('input.btn.btn-recruit').click(() => {
+            setTimeout(() => _loadValues(), 500);
+        });
+
+        // Saves on the localStorage
+        $('#CR-save-btn').click(() => {
+            _saveValues();
+            UI.Notification.show("https://th.bing.com/th/id/OIP.5R-ae5VM-10Ijm1Dxd7QdAHaHY?pid=Api&rs=1", 'Done!', 'Settings saved successfully!');
+        })
+
         // Run
         _recruitIfPossible();
     });
@@ -108,8 +142,8 @@
                 .fail(req => reject(console.error("[TwScripts] Fail loading module '", moduleName, "'.")));
         })
     }
-}, `<div class="CS-rcontainer"><h3>Configurar auto-recrutamento</h3>
-<table id="CS-rtable" style="margin-bottom: 10px" class="vis" width="100%">
+}, `<div class="CR-rcontainer"><h3>Configurar auto-recrutamento</h3>
+<table id="CR-rtable" style="margin-bottom: 10px" class="vis" width="100%">
     <tbody>
         <tr>
             <th style="text-align:center">
@@ -141,15 +175,17 @@
             </th>
         </tr>
         <tr id="un_qtds">
-            <td class="unit-item unit-item-spear hidden"><input maxlenght="5" class="CS-ri recruit_unit" type="number" id="CR-u-spear"></td>
-            <td class="unit-item unit-item-sword hidden"><input maxlenght="5" class="CS-ri recruit_unit" type="number" id="CR-u-sword"></td>
-            <td class="unit-item unit-item-axe hidden"><input maxlenght="5" class="CS-ri recruit_unit" type="number" id="CR-u-axe"></td>
-            <td class="unit-item unit-item-spy hidden"><input maxlenght="5" class="CS-ri recruit_unit" type="number" id="CR-u-spy"></td>
-            <td class="unit-item unit-item-light hidden"><input maxlenght="5" class="CS-ri recruit_unit" type="number" id="CR-u-light"></td>
-            <td class="unit-item unit-item-heavy hidden"><input maxlenght="5" class="CS-ri recruit_unit" type="number" id="CR-u-heavy"></td>
-            <td class="unit-item unit-item-ram hidden"><input maxlenght="5" class="CS-ri recruit_unit" type="number" id="CR-u-ram"></td>
-            <td class="unit-item unit-item-catapult hidden"><input maxlenght="5" class="CS-ri recruit_unit" type="number" id="CR-u-catapult"></td>
-            <td class="unit-item unit-item-snob hidden"><input maxlenght="5" class="CS-ri recruit_unit" type="number" id="CR-u-snob"></td>
+            <td class="unit-item unit-item-spear hidden"><input maxlenght="5" class="CR-ri recruit_unit" type="number" id="CR-u-spear"></td>
+            <td class="unit-item unit-item-sword hidden"><input maxlenght="5" class="CR-ri recruit_unit" type="number" id="CR-u-sword"></td>
+            <td class="unit-item unit-item-axe hidden"><input maxlenght="5" class="CR-ri recruit_unit" type="number" id="CR-u-axe"></td>
+            <td class="unit-item unit-item-spy hidden"><input maxlenght="5" class="CR-ri recruit_unit" type="number" id="CR-u-spy"></td>
+            <td class="unit-item unit-item-light hidden"><input maxlenght="5" class="CR-ri recruit_unit" type="number" id="CR-u-light"></td>
+            <td class="unit-item unit-item-heavy hidden"><input maxlenght="5" class="CR-ri recruit_unit" type="number" id="CR-u-heavy"></td>
+            <td class="unit-item unit-item-ram hidden"><input maxlenght="5" class="CR-ri recruit_unit" type="number" id="CR-u-ram"></td>
+            <td class="unit-item unit-item-catapult hidden"><input maxlenght="5" class="CR-ri recruit_unit" type="number" id="CR-u-catapult"></td>
+            <td class="unit-item unit-item-snob hidden"><input maxlenght="5" class="CR-ri recruit_unit" type="number" id="CR-u-snob"></td>
         </tr>
     </tbody>
-</table></div>`);
+</table>
+<button id='CR-save-btn' class='btn'>Save</button><span id='CR-save-btntxt'></span>
+</div>`);
