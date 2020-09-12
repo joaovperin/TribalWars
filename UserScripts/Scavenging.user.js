@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Scavenging
-// @version     	    1.0.2
+// @version     	    1.0.3
 // @description         Scavenge for resources automatically
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -26,7 +26,7 @@
     await ModuleLoader.loadModule('utils/notify-utils');
 
     // Controls the window title
-    TwFramework.setIdleTitlePreffix('SCAVENGING', document.title);
+    TwFramework.setIdleTitlePreffix('SCAVENGINGxx', document.title);
 
     const gameData = TribalWars.getGameData();
     const tag = gameData.world + '' + gameData.player.name + '' + gameData.screen + '_' + gameData.mode;
