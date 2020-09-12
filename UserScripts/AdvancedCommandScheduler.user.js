@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Advanced Command Scheduler
-// @version     	    1.0.1
+// @version     	    1.0.2
 // @description         Schedule attacks and supports, optimized for maximum precision. Uses browser serviceWorkers.
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
