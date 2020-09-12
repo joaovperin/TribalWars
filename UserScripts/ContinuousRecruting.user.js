@@ -36,7 +36,6 @@
     }
     addGlobalStyle('#CR-rtable td {text-align:center;} #CR-rtable #un_qtds td {width:20px;} .CR-rcontainer {padding: 20px 0px; margin: 0;} input.CR-ri{width: 50px;}');
 
-
     const unitData = {
         'spear': 0,
         'sword': 0,
