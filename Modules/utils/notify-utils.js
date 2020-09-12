@@ -13,7 +13,7 @@ if (!window.TwFramework) {
     const ModuleName = 'utils.notify-utils';
 
     // Dependency loading
-    await ModuleLoader.load('utils.event-utils');
+    await ModuleLoader.loadModule('utils.event-utils');
 
     /** Script configurations */
     const _Configurations = {};

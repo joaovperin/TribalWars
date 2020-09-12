@@ -13,7 +13,7 @@ if (!window.TwFramework) {
     const ModuleName = 'examples.example-module';
 
     // Dependency loading
-    await ModuleLoader.load('utils.event-utils');
+    await ModuleLoader.loadModule('utils.event-utils');
 
 
     // Public API
