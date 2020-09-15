@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Catpcha Solver
-// @version     	    1.0.1
+// @version     	    1.0.2
 // @description         Solve your captchas for you, so you don't need to worry getting banned
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -53,7 +53,7 @@
         }
         // Fallback: a checkbox designed div without a form (they are starting to be smart hehe)
         ((_selector) => {
-            if ($(_selector)()) {
+            if ($(_selector)) {
                 $(_selector).click();
             }
         })('.recaptcha-checkbox.recaptcha-checkbox-unchecked.rc-anchor-checkbox');
