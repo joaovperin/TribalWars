@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Catpcha Solver
-// @version     	    1.0.2
+// @version     	    1.0.3
 // @description         Solve your captchas for you, so you don't need to worry getting banned
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
