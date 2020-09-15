@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Catpcha Solver
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Solve your captchas for you, so you don't need to worry getting banned
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -28,6 +28,8 @@
             return;
         }
     }
+
+
     // Auto-solve capcha (if possible)
     if (location.href.indexOf('google.com/recaptcha') > -1) {
         var clickCheck = setInterval(function () {
@@ -49,6 +51,12 @@
                 }, 100);
             }
         }
+        // Fallback: a checkbox designed div without a form (they are starting to be smart hehe)
+        ((_selector) => {
+            if ($(_selector)()) {
+                $(_selector).click();
+            }
+        })('.recaptcha-checkbox.recaptcha-checkbox-unchecked.rc-anchor-checkbox');
     }
 
 })();
