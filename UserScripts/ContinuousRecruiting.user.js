@@ -5,8 +5,8 @@
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
 // @include             https://**.tribalwars.com.*/game.php?**&screen=train*
-// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/ContinuousRecruting.user.user.js
-// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/ContinuousRecruting.user.user.js
+// @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/ContinuousRecruiting.user.user.js
+// @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/ContinuousRecruiting.user.user.js
 // ==/UserScript==
 
 /**
@@ -49,8 +49,16 @@
         'snob': 0
     };
 
+    const ScriptParams = {
+        'active': false
+    };
+
     // Try to recruit
     const _recruitIfPossible = () => {
+        // if not active, abort!
+        if (!ScriptParams['active']) {
+            return;
+        }
         let canRecruit = false;
         Object.keys(unitData)
             .filter(e => unitData[e] > 0)
@@ -79,25 +87,34 @@
     };
 
     // Load entries or default from localStorage
-    const _loadValues = () => {
-        Object.keys(unitData).forEach(key => {
+    const _loadValues = (objectToLoad) => {
+        Object.keys(objectToLoad).forEach(key => {
             const localStorageKey = `TwFramework.CR.${key}`;
-            unitData[key] = localStorage.getItem(localStorageKey) || unitData[key];
+            objectToLoad[key] = localStorage.getItem(localStorageKey) || objectToLoad[key];
             // Write on the screen
-            $(`#CR-u-${key}`).val(unitData[key] > 0 ? unitData[key] : '');
+            $(`#CR-u-${key}`).val(objectToLoad[key] > 0 ? objectToLoad[key] : '');
         });
     };
 
     // Load entries on the localStorage
-    const _saveValues = () => {
-        Object.keys(unitData).forEach(key => {
+    const _saveValues = (objectToSave) => {
+        Object.keys(objectToSave).forEach(key => {
             const localStorageKey = `TwFramework.CR.${key}`;
-            localStorage.setItem(localStorageKey, unitData[key]);
+            localStorage.setItem(localStorageKey, objectToSave[key]);
         });
     }
 
+    const _loadButtonLiterals = () => {
+        if (ScriptParams['active']) {
+            $('#CR-toggle-btn').text('Stop');
+        } else {
+            $('#CR-toggle-btn').text('Start');
+        }
+    };
+
     $(() => {
-        _loadValues();
+        _loadValues(unitData);
+        _loadValues(ScriptParams);
         Object.keys(unitData).forEach(key => {
             // Updates value on memory
             $(`#CR-u-${key}`).change(evt => {
@@ -107,16 +124,30 @@
 
         // Writes everything on the screen
         $('input.btn.btn-recruit').click(() => {
-            setTimeout(() => _loadValues(), 500);
+            setTimeout(() => {
+                _loadValues(unitData);
+                _loadValues(ScriptParams);
+            }, 500);
         });
 
         // Saves on the localStorage
         $('#CR-save-btn').click(() => {
-            _saveValues();
+            _saveValues(unitData);
             UI.Notification.show("https://th.bing.com/th/id/OIP.5R-ae5VM-10Ijm1Dxd7QdAHaHY?pid=Api&rs=1", 'Done!', 'Settings saved successfully!');
         })
 
+        // Start/Stop button
+        $('#CR-toggle-btn').click(() => {
+            // Toggle current status
+            if (ScriptParams['active']) {
+                ScriptParams['active'] = false;
+            } else ScriptParams['active'] = true;
+            _saveValues(ScriptParams);
+            _loadButtonLiterals();
+        })
+
         // Run
+        _loadButtonLiterals();
         _recruitIfPossible();
     });
 
@@ -187,5 +218,6 @@
         </tr>
     </tbody>
 </table>
-<button id='CR-save-btn' class='btn'>Save</button><span id='CR-save-btntxt'></span>
+<button id='CR-toggle-btn' class='btn'>Start</button>
+<button id='CR-save-btn' class='btn'>Save</button>
 </div>`);
