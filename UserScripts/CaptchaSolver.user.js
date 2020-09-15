@@ -29,7 +29,6 @@
         }
     }
 
-
     // Auto-solve capcha (if possible)
     if (location.href.indexOf('google.com/recaptcha') > -1) {
         var clickCheck = setInterval(function () {
@@ -51,12 +50,15 @@
                 }, 100);
             }
         }
-        // Fallback: a checkbox designed div without a form (they are starting to be smart hehe)
+    }
+
+    // Fallback: a checkbox designed div without a form (they are starting to be smart hehe)
+    const _botCheckInterval = setInterval(() => {
         ((_selector) => {
             if ($(_selector)) {
                 $(_selector).click();
             }
         })('.recaptcha-checkbox.recaptcha-checkbox-unchecked.rc-anchor-checkbox');
-    }
+    });
 
 })();
