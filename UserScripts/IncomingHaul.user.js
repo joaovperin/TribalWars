@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Incoming Haul
-// @version     	    1.0.0
+// @version     	    1.0.1
 // @description         Shows the total incoming haul (support and attack) in the village overview screen
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -60,7 +60,6 @@
     // Evaluate every incoming command
     for (let i = 1; i < incCmdTable.rows.length; i++) {
         const cmdElm = incCmdTable.rows[i].querySelector('[data-command-type]');
-        if (i >= 15) break; // stop
         if (cmdElm.dataset.commandType === 'return') {
             let id = cmdElm.getAttribute("data-command-id"); // Get command ID
             returningAttacks[id] = incCmdTable.rows[i];
@@ -82,8 +81,8 @@
                     let responseHaul = response.booty;
                     cmdCounter++;
                     // Loading bar
-                    console.log('Processing ', cmdCounter, ' of ', commandIds.length);
-                    $('#haul-message').html('Processando ' + cmdCounter + ' of ' + commandIds.length + '...');
+                    console.log('Processing ', cmdCounter, ' de ', commandIds.length, ' comandos');
+                    $('#haul-message').html('Processando ' + cmdCounter + ' de ' + commandIds.length + ' comandos...');
                     let haulData = new HaulData(0, 0, 0);
                     // Spies do not have have any haul
                     if (responseHaul) {
