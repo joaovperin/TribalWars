@@ -16,7 +16,7 @@
     'use strict';
 
     //****************************** Configuration ******************************//
-    const reloadInterval = 25 * 60 * 1000;
+    const reloadInterval = 10 * 60 * 1000;
     const minimumQueueSize = 2;
     //*************************** End Configuration ***************************//
 
@@ -25,6 +25,7 @@
 
     // Dependency loading
     await ModuleLoader.loadModule('utils/notify-utils');
+    await ModuleLoader.loadModule('utils/config-utils');
 
     // Controls the window title
     TwFramework.setIdleTitlePreffix('RECRUITING', document.title);
@@ -37,7 +38,7 @@
     }
     addGlobalStyle('#CR-rtable td {text-align:center;} #CR-rtable #un_qtds td {width:20px;} .CR-rcontainer {padding: 20px 0px; margin: 0;} input.CR-ri{width: 50px;}');
 
-    const unitData = {
+    let unitData = {
         'spear': 0,
         'sword': 0,
         'axe': 3,
@@ -49,14 +50,10 @@
         'snob': 0
     };
 
-    const ScriptParams = {
-        'active': false
-    };
-
     // Try to recruit
     const _recruitIfPossible = () => {
         // if not active, abort!
-        if (!ScriptParams['active']) {
+        if (TwFramework.readConfiguration('CR_active', 2) != 1) {
             return;
         }
         let canRecruit = false;
@@ -86,26 +83,15 @@
         }
     };
 
-    // Load entries or default from localStorage
-    const _loadValues = (objectToLoad) => {
-        Object.keys(objectToLoad).forEach(key => {
-            const localStorageKey = `TwFramework.CR.${key}`;
-            objectToLoad[key] = localStorage.getItem(localStorageKey) || objectToLoad[key];
-            // Write on the screen
-            $(`#CR-u-${key}`).val(objectToLoad[key] > 0 ? objectToLoad[key] : '');
+    // Update the UI with the data
+    const _updateUI = () => {
+        Object.keys(unitData).forEach(key => {
+            $(`#CR-u-${key}`).val(unitData[key] > 0 ? unitData[key] : '');
         });
     };
 
-    // Load entries on the localStorage
-    const _saveValues = (objectToSave) => {
-        Object.keys(objectToSave).forEach(key => {
-            const localStorageKey = `TwFramework.CR.${key}`;
-            localStorage.setItem(localStorageKey, objectToSave[key]);
-        });
-    }
-
     const _loadButtonLiterals = () => {
-        if (ScriptParams['active']) {
+        if (TwFramework.readConfiguration('CR_active', 2) == 1) {
             $('#CR-toggle-btn').text('Stop');
         } else {
             $('#CR-toggle-btn').text('Start');
@@ -113,8 +99,8 @@
     };
 
     $(() => {
-        _loadValues(unitData);
-        _loadValues(ScriptParams);
+        unitData = TwFramework.readConfiguration('CR_unitData', unitData);
+        _updateUI();
         Object.keys(unitData).forEach(key => {
             // Updates value on memory
             $(`#CR-u-${key}`).change(evt => {
@@ -125,24 +111,23 @@
         // Writes everything on the screen
         $('input.btn.btn-recruit').click(() => {
             setTimeout(() => {
-                _loadValues(unitData);
-                _loadValues(ScriptParams);
+                unitData = TwFramework.readConfiguration('CR_unitData', unitData);
+                _updateUI();
             }, 500);
         });
 
         // Saves on the localStorage
         $('#CR-save-btn').click(() => {
-            _saveValues(unitData);
+            TwFramework.saveConfiguration('CR_unitData', unitData);
             UI.Notification.show("https://th.bing.com/th/id/OIP.5R-ae5VM-10Ijm1Dxd7QdAHaHY?pid=Api&rs=1", 'Done!', 'Settings saved successfully!');
         })
 
         // Start/Stop button
         $('#CR-toggle-btn').click(() => {
             // Toggle current status
-            if (ScriptParams['active']) {
-                ScriptParams['active'] = false;
-            } else ScriptParams['active'] = true;
-            _saveValues(ScriptParams);
+            if (TwFramework.readConfiguration('CR_active', 2) == 1) {
+                TwFramework.saveConfiguration('CR_active', 2);
+            } else TwFramework.saveConfiguration('CR_active', 1);
             _loadButtonLiterals();
         })
 
