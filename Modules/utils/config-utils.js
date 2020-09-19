@@ -65,7 +65,7 @@ new Promise(exportModule => {
 
         // Create configuration object if not exists
         if (!localStorage.getItem(_Configurations.masterKey)) {
-            localStorage.setItem(_Configurations.masterKey, {});
+            localStorage.setItem(_Configurations.masterKey, JSON.stringify({}));
         }
 
         // Confirm the script is ready!
