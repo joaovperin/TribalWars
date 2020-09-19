@@ -49,6 +49,7 @@ new Promise(exportModule => {
                 cfg[lvl_1][lvl_2] = {};
             }
             cfg[lvl_1][lvl_2][lvl_3] = value;
+            localStorage.setItem(_Configurations.masterKey, JSON.stringify(cfg));
         };
 
         // Public API
