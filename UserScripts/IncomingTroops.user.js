@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Incoming Troops
-// @version     	    1.0.1
+// @version     	    1.0.2
 // @description         Shows the total incoming troops (support and attack) in the village info screen
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -140,9 +140,12 @@
             thingsToShow.push('haul');
         }
         thingsToShow.forEach((key) => {
-            myTable.getElementsByClassName("unit-item-" + key)[0].innerText = incUnits[key];
-            if (incUnits[key] > 0) {
-                myTable.getElementsByClassName("unit-item-" + key)[0].classList.remove("hidden");
+            const elms = myTable.getElementsByClassName("unit-item-" + key)[0];
+            if (elms) {
+                elms.innerText = incUnits[key];
+                if (incUnits[key] > 0) {
+                    elms.classList.remove("hidden");
+                }
             }
         });
     }

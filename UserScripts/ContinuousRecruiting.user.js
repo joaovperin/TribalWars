@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                Continuous Recruiting
-// @version     	    1.0.4
+// @version     	    1.0.5
 // @description         Auto-recruit units if there's no one on the queue
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
@@ -41,11 +41,11 @@
     let unitData = {
         'spear': 0,
         'sword': 0,
-        'axe': 3,
-        'spy': 0,
-        'light': 2,
+        'axe': 25,
+        'spy': 1,
+        'light': 10,
         'heavy': 0,
-        'ram': 0,
+        'ram': 1,
         'catapult': 0,
         'snob': 0
     };
