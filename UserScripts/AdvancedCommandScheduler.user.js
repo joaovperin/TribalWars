@@ -41,7 +41,7 @@
                     <td><input type="number" id="ACSInternetDelay"><button type="button" id="ACSbutton" class="btn">Confirm</button></td>
                  </tr>`
             );
-            this.confirmButton = $('#troop_confirm_go');
+            this.confirmButton = $('#troop_confirm_submit');
             this.duration = $('#command-data-form').find('td:contains("Duração:")').next().text().split(':').map(Number);
             this.internetDelay = localStorage.getItem('ACS.internetDelay') || defaultInternetDelay;
             this.dateNow = this.convertToInput((() => {
