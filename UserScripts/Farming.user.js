@@ -4,7 +4,7 @@
 // @description         Farm automaically for resources
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
-// @include             https://**.tribalwars.com.*/game.php?**&screen=am_farm*
+// @include             https://**.tribalwars.*/game.php?**&screen=am_farm*
 // @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/Farming.user.js
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/Farming.user.js
 // ==/UserScript==
@@ -42,20 +42,20 @@
 
 
     // Define start variables
-    if (localStorage.speed) {
+    if (localStorage.speed !== undefined) {
         speed = localStorage.speed;
     } else {
         speed = 350;
         localStorage.speed = speed;
     }
-    if (localStorage.switchSpeed) {
+    if (localStorage.switchSpeed !== undefined) {
         switchSpeed = localStorage.switchSpeed;
     } else {
         switchSpeed = 0;
         localStorage.switchSpeed = switchSpeed;
     }
-    if (localStorage.stop) {
-        stop = JSON.parse(localStorage.stop);
+    if (localStorage.stop !== undefined) {
+        stop = !!localStorage.stop;
     } else {
         stop = true;
         localStorage.stop = stop;
