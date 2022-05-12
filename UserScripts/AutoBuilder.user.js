@@ -4,7 +4,7 @@
 // @description         Put things on the building queue, automatically
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
-// @include             https://**.tribalwars.com.*/game.php?**&screen=main
+// @include             https://**.tribalwars.*/game.php?**&screen=main
 // @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/AutoBuilder.user.js
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/AutoBuilder.user.js
 // ==/UserScript==
