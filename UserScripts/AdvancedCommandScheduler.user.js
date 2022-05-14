@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name                Advanced Command Scheduler
-// @version     	    1.0.3
+// @version     	    1.0.4
 // @description         Schedule attacks and supports, optimized for maximum precision. Uses browser serviceWorkers.
 // @author              joaovperin
 // @icon                https://i.imgur.com/7WgHTT8.gif
-// @include             https://**.tribalwars.com.*/game.php?**&screen=place*&try=confirm*
+// @include             https://**.tribalwars.*/game.php?**&screen=place*&try=confirm*
 // @downloadURL         https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/AdvancedCommandScheduler.user.js
 // @updateURL           https://raw.githubusercontent.com/joaovperin/TribalWars/master/UserScripts/AdvancedCommandScheduler.user.js
 // ==/UserScript==
