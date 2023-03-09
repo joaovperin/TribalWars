@@ -2,6 +2,14 @@
 
 TribalWars Scripts and utilities.
 
+# Deprecated! 
+
+## Currently working on https://tw-assistant.com/
+
+### Give it a try 😉
+
+
+
 ### Modules
 
 Multi-purpose modules to help doing the scripts
